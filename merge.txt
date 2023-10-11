@@ -1,0 +1,48 @@
+[
+  {
+    $match:
+      /**
+       * query: The query in MQL.
+       */
+      {
+        $and: [
+          {
+            orderFromSun: {
+              $gte: 3,
+            },
+          },
+        ],
+      },
+  },
+  {
+    $project:
+      /**
+       * specifications: The fields to
+       *   include or exclude.
+       */
+      {
+        pianeta: "$name",
+        ordine: "$orderFromSun",
+        rings: "$hasRings",
+      },
+  },
+  {
+    $sort:
+      /**
+       * Provide any number of field/order pairs.
+       */
+      {
+        orderFromSun: 1,
+      },
+  },
+  {
+    $merge:
+      /**
+       * Provide the name of the output collection.
+       */
+      {
+        into: "planets_analisys",
+        whenMatched: "merge",
+      },
+  },
+]
