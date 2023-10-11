@@ -1,0 +1,39 @@
+AirBnb 2
+****************
+
+[
+  {
+    $group:
+      /**
+       * _id: The id of the group.
+       * fieldN: The first field name.
+       */
+      {
+        _id: "$bed_type",
+        proposte: {
+          $push: {
+            _id: "$_id",
+            name: "$name",
+          },
+        },
+        totale: {
+          $count: {},
+        },
+      },
+  },
+  {
+    $project:
+      /**
+       * specifications: The fields to
+       *   include or exclude.
+       */
+      {
+        _id: "$_id",
+        proposte: "$proposte",
+        totale_con_size: {
+          $size: "$proposte",
+        },
+        totale: "$totale",
+      },
+  },
+]

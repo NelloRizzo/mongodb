@@ -1,0 +1,39 @@
+Regions
+*******************
+[
+  {
+    $project:
+      /**
+       * specifications: The fields to
+       *   include or exclude.
+       */
+      {
+        _id: "$cod_regione",
+        name: "$regione",
+        area_id: "$cod_area",
+      },
+  },
+  {
+    $group:
+      /**
+       * _id: The id of the group.
+       * fieldN: The first field name.
+       */
+      {
+        _id: "$_id",
+        name: {
+          $first: "$name",
+        },
+        area_id: {
+          $first: "$area_id",
+        },
+      },
+  },
+  {
+    $out:
+      /**
+       * Provide the name of the output collection.
+       */
+      "regions",
+  },
+]

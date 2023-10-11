@@ -1,0 +1,60 @@
+Unset Fields
+*******************
+[
+  {
+    $set:
+      /**
+       * field: The field name
+       * expression: The expression.
+       */
+      {
+        capoluogo: {
+          $eq: ["capoluogo", 1],
+        },
+        nome_completo: {
+          $concat: [
+            "$denominazione",
+            " (",
+            "$sigla",
+            ")",
+          ],
+        },
+      },
+  },
+  {
+    $unset:
+      /**
+       * Provide the field name to exclude.
+       * To exclude multiple fields, pass the field names in an array.
+       */
+      [
+        "cod_area",
+        "cod_regione",
+        "cod_provincia",
+        "cod_comune",
+      ],
+  },
+  {
+    $sort:
+      /**
+       * Provide any number of field/order pairs.
+       */
+      {
+        sigla: 1,
+      },
+  },
+  {
+    $skip:
+      /**
+       * Provide the number of documents to skip.
+       */
+      100 * 3,
+  },
+  {
+    $limit:
+      /**
+       * Provide the number of documents to limit.
+       */
+      100,
+  },
+]

@@ -1,0 +1,27 @@
+Cities Pagination
+*******************
+[
+  {
+    $sort:
+      /**
+       * Provide any number of field/order pairs.
+       */
+      {
+        sigla: 1,
+      },
+  },
+  {
+    $skip:
+      /**
+       * Provide the number of documents to skip.
+       */
+      100 * 3,
+  },
+  {
+    $limit:
+      /**
+       * Provide the number of documents to limit.
+       */
+      100,
+  },
+]

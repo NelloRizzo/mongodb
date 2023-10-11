@@ -1,0 +1,30 @@
+AirBnb 1
+****************
+
+[
+  {
+    $group:
+      /**
+       * _id: The id of the group.
+       * fieldN: The first field name.
+       */
+      {
+        _id: "$property_type",
+        posti_letto: {
+          $sum: "$accommodates",
+        },
+        media_posti_letto: {
+          $avg: "$accommodates",
+        },
+        totale: {
+          $count: {},
+        },
+        min: {
+          $min: "$accommodates",
+        },
+        max: {
+          $max: "$accommodates",
+        },
+      },
+  },
+]

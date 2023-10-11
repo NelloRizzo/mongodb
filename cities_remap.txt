@@ -1,0 +1,36 @@
+Cities remap
+***************
+
+[
+  {
+    $set:
+      /**
+       * field: The field name
+       * expression: The expression.
+       */
+      {
+        capoluogo: {
+          $eq: ["$capoluogo", 1],
+        },
+        _id: "$cod_comune",
+      },
+  },
+  {
+    $unset: [
+      "area",
+      "cod_area",
+      "cod_provincia",
+      "cod_regione",
+      "regione",
+      "provincia",
+      "cod_comune",
+    ],
+  },
+  {
+    $out:
+      /**
+       * Provide the name of the output collection.
+       */
+      "italian_cities",
+  },
+]
