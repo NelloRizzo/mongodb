@@ -1,0 +1,90 @@
+[
+  {
+    $group:
+      /**
+       * _id: The id of the group.
+       * fieldN: The first field name.
+       */
+      {
+        _id: "$region_id",
+        estensione: {
+          $sum: "$kmq",
+        },
+        popolazione: {
+          $sum: "$people",
+        },
+      },
+  },
+  {
+    $lookup:
+      /**
+       * from: The target collection.
+       * localField: The local join field.
+       * foreignField: The target join field.
+       * as: The name for the results.
+       * pipeline: Optional pipeline to run on the foreign collection.
+       * let: Optional variables to use in the pipeline field stages.
+       */
+      {
+        from: "regions",
+        localField: "_id",
+        foreignField: "_id",
+        as: "regione",
+      },
+  },
+  {
+    $unwind:
+      /**
+       * path: Path to the array field.
+       * includeArrayIndex: Optional name for index.
+       * preserveNullAndEmptyArrays: Optional
+       *   toggle to unwind null and empty values.
+       */
+      {
+        path: "$regione",
+      },
+  },
+  {
+    $project:
+      /**
+       * specifications: The fields to
+       *   include or exclude.
+       */
+      {
+        kmq: {
+          $convert: {
+            input: "$estensione",
+            to: "double",
+          },
+        },
+        ha: {
+          $toDouble: {
+            $multiply: ["$estensione", 100],
+          },
+        },
+        densita_kmq: {
+          $toDouble: {
+            $toString: {
+              $divide: [
+                {
+                  $toLong: {
+                    $multiply: [
+                      {
+                        $divide: [
+                          "$popolazione",
+                          "$estensione",
+                        ],
+                      },
+                      100,
+                    ],
+                  },
+                },
+                100,
+              ],
+            },
+          },
+        },
+        regione: "$regione.name",
+      },
+  },
+]
