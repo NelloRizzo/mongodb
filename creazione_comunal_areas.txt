@@ -1,0 +1,104 @@
+// Creazione della collection "comunal_areas"
+[
+  {
+    $match:
+      /**
+       * query: The query in MQL.
+       */
+      {
+        "Codice Comune": {
+          $exists: true,
+          $ne: null,
+        },
+      },
+  },
+  {
+    $set:
+      /**
+       * field: The field name
+       * expression: The expression.
+       */
+      {
+        region_id: "$Codice Regione",
+        province_id: "$Codice Provincia",
+        city_id: "$Codice Comune",
+        name: "$Denominazione Comune",
+        kmq: "$Superficie totale (Km2)",
+        area_class:
+          "$Classi di superficie totale (in Km2)",
+        people:
+          "$Popolazione residente al Censimento 2011",
+      },
+  },
+  {
+    $unset: [
+      "Codice Regione",
+      "Codice Provincia",
+      "Codice Comune",
+      "Denominazione Comune",
+      "Superficie totale (ettari)",
+      "Superficie totale (Km2)",
+      "Classi di superficie totale (in Km2)",
+      "Popolazione residente al Censimento 2011",
+      "Densità abitativa (abitanti per Km2)",
+    ],
+  },
+  {
+    $set:
+      /**
+       * field: The field name
+       * expression: The expression.
+       */
+      {
+        kmq: {
+          $toDecimal: {
+            // converto in decimale
+            $replaceAll: {
+              // sostituzione di , con . - per i numeri decimali
+              input: {
+                // parametro di input per il primo replaceall
+                $replaceAll: {
+                  // sostituzione di . con nulla - per i separatori di migliaia
+                  input: {
+                    // input della seconda replaceall
+                    $trim: {
+                      // fa il trim del campo in input "kmq"
+                      input: "$kmq",
+                    },
+                  },
+                  find: ".",
+                  // cerca il .
+                  replacement: "", // e lo rimpiazza con una stringa vuota
+                },
+              },
+
+              find: ",",
+              // prima replace - cerca la virgola
+              replacement: ".", // e la sostituisce con il punto decimale
+            },
+          },
+        },
+
+        people: {
+          $toLong: {
+            $replaceAll: {
+              input: {
+                $trim: {
+                  input: "$people",
+                },
+              },
+              find: ".",
+              replacement: "",
+            },
+          },
+        },
+      },
+  },
+  {
+    $out:
+      /**
+       * Provide the name of the output collection.
+       */
+      "comunal_areas",
+  },
+]
