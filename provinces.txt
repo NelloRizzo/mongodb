@@ -1,0 +1,41 @@
+[
+  {
+    $project:
+      /**
+       * specifications: The fields to
+       *   include or exclude.
+       */
+      {
+        _id: "$cod_provincia",
+        name: "$provincia",
+        sigla: "$sigla",
+        region_id: "$cod_regione",
+      },
+  },
+  {
+    $group:
+      /**
+       * _id: The id of the group.
+       * fieldN: The first field name.
+       */
+      {
+        _id: "$_id",
+        name: {
+          $first: "$name",
+        },
+        acronym: {
+          $first: "$sigla",
+        },
+        region_id: {
+          $first: "$region_id",
+        },
+      },
+  },
+  {
+    $out:
+      /**
+       * Provide the name of the output collection.
+       */
+      "provinces",
+  },
+]
