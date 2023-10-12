@@ -1,0 +1,20 @@
+[{
+  "_id": 3,
+  "name": "Centro"
+},
+{
+  "_id": 4,
+  "name": "Sud"
+},
+{
+  "_id": 2,
+  "name": "Nord-est"
+},
+{
+  "_id": 5,
+  "name": "Isole"
+},
+{
+  "_id": 1,
+  "name": "Nord-ovest"
+}]
