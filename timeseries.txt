@@ -1,0 +1,27 @@
+[
+  {
+    $group:
+      /**
+       * _id: The id of the group.
+       * fieldN: The first field name.
+       */
+      {
+        _id: {
+          giorno: {
+            $dayOfMonth: "$timestamp",
+          },
+          mese: {
+            $month: "$timestamp",
+          },
+        },
+        temperratura_media: {
+          $avg: "$temperature",
+        },
+        misurazioni: {
+          $push: {
+            sensor: "$data.sensor",
+          },
+        },
+      },
+  },
+]
